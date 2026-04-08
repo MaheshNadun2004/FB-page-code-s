@@ -2,132 +2,113 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pusek Cat</title>
+<title>Perfect Wall Clock</title>
 <style>
-body{
-  margin:0;
-  padding:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  background: linear-gradient(145deg,#fce9cf,#ffe1b9);
-}
-canvas{
-  border-radius:25px;
-  background:#fff7ec;
-  cursor:pointer;
-}
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f0f0;
+  }
+
+  .clock {
+    width: 300px;
+    height: 300px;
+    border: 10px solid #333;
+    border-radius: 50%;
+    position: relative;
+    background: white;
+  }
+
+  .center {
+    width: 15px;
+    height: 15px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+
+  .hand {
+    width: 50%;
+    height: 4px;
+    background: #333;
+    position: absolute;
+    top: 50%;
+    transform-origin: 100%;
+    transform: rotate(90deg);
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .hour { height: 6px; background: #000; z-index: 3; }
+  .minute { background: #555; z-index: 2; }
+  .second { background: red; height: 2px; z-index: 1; }
+
+  /* Numbers */
+  .number {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+    top: 50%;
+    left: 50%;
+    transform-origin: center -130px; /* distance from center = radius - edge padding */
+  }
+
+  /* Rotate numbers properly */
+  .num1  { transform: rotate(30deg)  translateY(-130px) rotate(-30deg); }
+  .num2  { transform: rotate(60deg)  translateY(-130px) rotate(-60deg); }
+  .num3  { transform: rotate(90deg)  translateY(-130px) rotate(-90deg); }
+  .num4  { transform: rotate(120deg) translateY(-130px) rotate(-120deg); }
+  .num5  { transform: rotate(150deg) translateY(-130px) rotate(-150deg); }
+  .num6  { transform: rotate(180deg) translateY(-130px) rotate(-180deg); }
+  .num7  { transform: rotate(210deg) translateY(-130px) rotate(-210deg); }
+  .num8  { transform: rotate(240deg) translateY(-130px) rotate(-240deg); }
+  .num9  { transform: rotate(270deg) translateY(-130px) rotate(-270deg); }
+  .num10 { transform: rotate(300deg) translateY(-130px) rotate(-300deg); }
+  .num11 { transform: rotate(330deg) translateY(-130px) rotate(-330deg); }
+  .num12 { transform: rotate(0deg)   translateY(-130px) rotate(0deg); }
 </style>
 </head>
 <body>
-<canvas id="catCanvas" width="500" height="400"></canvas>
+<div class="clock">
+  <div class="center"></div>
+  <div class="hand hour" id="hour"></div>
+  <div class="hand minute" id="minute"></div>
+  <div class="hand second" id="second"></div>
+
+  <div class="number num1">1</div>
+  <div class="number num2">2</div>
+  <div class="number num3">3</div>
+  <div class="number num4">4</div>
+  <div class="number num5">5</div>
+  <div class="number num6">6</div>
+  <div class="number num7">7</div>
+  <div class="number num8">8</div>
+  <div class="number num9">9</div>
+  <div class="number num10">10</div>
+  <div class="number num11">11</div>
+  <div class="number num12">12</div>
+</div>
+
 <script>
-const c=document.getElementById('catCanvas'),ctx=c.getContext('2d');
-let state={eye:'n',ear:false,tail:false,paw:false,blush:false};
-let timer=null;
+function updateClock() {
+  const now = new Date();
+  const s = now.getSeconds();
+  const m = now.getMinutes();
+  const h = now.getHours();
 
-// clear previous timer
-function clearTimer(){ if(timer) clearTimeout(timer); }
-
-// pat animation
-function pat(){
-  clearTimer();
-  state.eye='h';
-  state.tail=true;
-  state.blush=true;
-  state.paw=true;
-  drawCat();
-  timer=setTimeout(()=>{
-    state.eye='n';
-    state.tail=false;
-    state.blush=false;
-    state.paw=false;
-    drawCat();
-  },550);
+  document.getElementById('second').style.transform = `rotate(${(s/60)*360 + 90}deg)`;
+  document.getElementById('minute').style.transform = `rotate(${(m/60)*360 + (s/60)*6 + 90}deg)`;
+  document.getElementById('hour').style.transform = `rotate(${(h/12)*360 + (m/60)*30 + 90}deg)`;
 }
 
-function drawCat(){
-  ctx.clearRect(0,0,500,400);
-
-  // body
-  ctx.beginPath();
-  ctx.ellipse(250,270,118,108,0,0,Math.PI*2);
-  ctx.fillStyle="#F9CF8C"; ctx.fill();
-  ctx.strokeStyle="#DEA252"; ctx.lineWidth=1.8; ctx.stroke();
-
-  // chest
-  ctx.beginPath();
-  ctx.ellipse(250,295,68,58,0,0,Math.PI*2);
-  ctx.fillStyle="#FFF2E0"; ctx.fill();
-
-  // head
-  ctx.beginPath();
-  ctx.ellipse(250,182,84,80,0,0,Math.PI*2);
-  ctx.fillStyle="#F9CF8C"; ctx.fill(); ctx.stroke();
-  ctx.beginPath();
-  ctx.ellipse(250,187,64,60,0,0,Math.PI*2);
-  ctx.fillStyle="#FFEAC6"; ctx.fill();
-
-  // ears
-  let l=state.ear?3:0, r=state.ear?-2:0;
-  ctx.beginPath(); ctx.moveTo(188+l,120); ctx.lineTo(162+l,68); ctx.lineTo(222+l,100); ctx.fillStyle="#EEB471"; ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(312+r,120); ctx.lineTo(338+r,68); ctx.lineTo(278+r,100); ctx.fillStyle="#EEB471"; ctx.fill(); ctx.stroke();
-
-  // eyes
-  const lx=218, rx=282, ly=170, ry=170;
-  ctx.fillStyle="#FFF"; ctx.beginPath(); ctx.ellipse(lx,ly,14,16,0,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(rx,ry,14,16,0,0,Math.PI*2); ctx.fill();
-
-  if(state.eye=='b'){ // blink
-    ctx.strokeStyle="#8B5A2B"; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(208,172); ctx.lineTo(228,172); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(272,172); ctx.lineTo(292,172); ctx.stroke();
-  }else{ // normal / happy
-    ctx.fillStyle="#2E241F"; ctx.beginPath(); ctx.arc(lx,ly,8,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(rx,ry,8,0,Math.PI*2); ctx.fill();
-  }
-
-  // blush
-  if(state.blush){
-    ctx.fillStyle="rgba(255,165,165,0.5)";
-    ctx.beginPath(); ctx.ellipse(190,194,14,9,0,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(310,194,14,9,0,0,Math.PI*2); ctx.fill();
-  }
-
-  // nose & whiskers
-  ctx.fillStyle="#FF8C7A"; ctx.beginPath(); ctx.ellipse(250,192,8,6,0,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle="#9B5E2E"; ctx.beginPath(); ctx.moveTo(250,198); ctx.lineTo(244,205); ctx.lineTo(256,205); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(188,186); ctx.lineTo(156,180); ctx.moveTo(312,186); ctx.lineTo(344,180);
-  ctx.lineWidth=1.8; ctx.strokeStyle="#C27E44"; ctx.stroke();
-
-  // paws
-  ctx.beginPath(); ctx.ellipse(170,305,22,18,0,0,Math.PI*2); ctx.fillStyle="#F9CF8C"; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(330,305,22,18,0,0,Math.PI*2); ctx.fillStyle="#F9CF8C"; ctx.fill();
-
-  // tail
-  ctx.beginPath();
-  let tx=state.tail?12:0, ty=state.tail?-8:4;
-  ctx.moveTo(368,288); ctx.quadraticCurveTo(398+tx,268+ty,412,248+(state.tail?-4:6));
-  ctx.lineTo(402,238); ctx.quadraticCurveTo(386+(state.tail?7:0),262,368,278);
-  ctx.fillStyle="#E2A455"; ctx.fill();
-
-  // collar
-  ctx.beginPath(); ctx.ellipse(250,226,34,9,0,0,Math.PI*2); ctx.fillStyle="#DA8A49"; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(250,226,12,8,0,0,Math.PI*2); ctx.fillStyle="#FCCB7E"; ctx.fill();
-}
-  
-// auto blink every 3 sec
-setInterval(()=>{
-  if(state.eye=='n'){state.eye='b'; drawCat(); setTimeout(()=>{state.eye='n'; drawCat();},150);}
-},3000);
-
-// click to pat
-c.addEventListener('click',()=>{pat();});
-c.addEventListener('touchstart',(e)=>{e.preventDefault();pat();});
-
-drawCat();
+setInterval(updateClock, 1000);
+updateClock();
 </script>
 </body>
 </html>
