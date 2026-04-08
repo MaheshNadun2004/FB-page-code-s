@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Perfect Wall Clock</title>
+<title>CodeNova LK</title>
 <style>
   body {
     display: flex;
@@ -48,7 +48,6 @@
   .minute { background: #555; z-index: 2; }
   .second { background: red; height: 2px; z-index: 1; }
 
-  /* Numbers */
   .number {
     position: absolute;
     font-weight: bold;
@@ -56,10 +55,9 @@
     color: #333;
     top: 50%;
     left: 50%;
-    transform-origin: center -130px; /* distance from center = radius - edge padding */
+    transform-origin: center -130px; 
   }
 
-  /* Rotate numbers properly */
   .num1  { transform: rotate(30deg)  translateY(-130px) rotate(-30deg); }
   .num2  { transform: rotate(60deg)  translateY(-130px) rotate(-60deg); }
   .num3  { transform: rotate(90deg)  translateY(-130px) rotate(-90deg); }
@@ -72,6 +70,7 @@
   .num10 { transform: rotate(300deg) translateY(-130px) rotate(-300deg); }
   .num11 { transform: rotate(330deg) translateY(-130px) rotate(-330deg); }
   .num12 { transform: rotate(0deg)   translateY(-130px) rotate(0deg); }
+
 </style>
 </head>
 <body>
@@ -101,12 +100,10 @@ function updateClock() {
   const s = now.getSeconds();
   const m = now.getMinutes();
   const h = now.getHours();
-
   document.getElementById('second').style.transform = `rotate(${(s/60)*360 + 90}deg)`;
   document.getElementById('minute').style.transform = `rotate(${(m/60)*360 + (s/60)*6 + 90}deg)`;
   document.getElementById('hour').style.transform = `rotate(${(h/12)*360 + (m/60)*30 + 90}deg)`;
 }
-
 setInterval(updateClock, 1000);
 updateClock();
 </script>
