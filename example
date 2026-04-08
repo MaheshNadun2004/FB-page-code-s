@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pusek Cat</title>
+<style>
+body{
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  background: linear-gradient(145deg,#fce9cf,#ffe1b9);
+}
+canvas{
+  border-radius:25px;
+  background:#fff7ec;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+<canvas id="catCanvas" width="500" height="400"></canvas>
+<script>
+const c=document.getElementById('catCanvas'),ctx=c.getContext('2d');
+let state={eye:'n',ear:false,tail:false,paw:false,blush:false};
+let timer=null;
+
+// clear previous timer
+function clearTimer(){ if(timer) clearTimeout(timer); }
+
+// pat animation
+function pat(){
+  clearTimer();
+  state.eye='h';
+  state.tail=true;
+  state.blush=true;
+  state.paw=true;
+  drawCat();
+  timer=setTimeout(()=>{
+    state.eye='n';
+    state.tail=false;
+    state.blush=false;
+    state.paw=false;
+    drawCat();
+  },550);
+}
+
+function drawCat(){
+  ctx.clearRect(0,0,500,400);
+
+  // body
+  ctx.beginPath();
+  ctx.ellipse(250,270,118,108,0,0,Math.PI*2);
+  ctx.fillStyle="#F9CF8C"; ctx.fill();
+  ctx.strokeStyle="#DEA252"; ctx.lineWidth=1.8; ctx.stroke();
+
+  // chest
+  ctx.beginPath();
+  ctx.ellipse(250,295,68,58,0,0,Math.PI*2);
+  ctx.fillStyle="#FFF2E0"; ctx.fill();
+
+  // head
+  ctx.beginPath();
+  ctx.ellipse(250,182,84,80,0,0,Math.PI*2);
+  ctx.fillStyle="#F9CF8C"; ctx.fill(); ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(250,187,64,60,0,0,Math.PI*2);
+  ctx.fillStyle="#FFEAC6"; ctx.fill();
+
+  // ears
+  let l=state.ear?3:0, r=state.ear?-2:0;
+  ctx.beginPath(); ctx.moveTo(188+l,120); ctx.lineTo(162+l,68); ctx.lineTo(222+l,100); ctx.fillStyle="#EEB471"; ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(312+r,120); ctx.lineTo(338+r,68); ctx.lineTo(278+r,100); ctx.fillStyle="#EEB471"; ctx.fill(); ctx.stroke();
+
+  // eyes
+  const lx=218, rx=282, ly=170, ry=170;
+  ctx.fillStyle="#FFF"; ctx.beginPath(); ctx.ellipse(lx,ly,14,16,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(rx,ry,14,16,0,0,Math.PI*2); ctx.fill();
+
+  if(state.eye=='b'){ // blink
+    ctx.strokeStyle="#8B5A2B"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(208,172); ctx.lineTo(228,172); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(272,172); ctx.lineTo(292,172); ctx.stroke();
+  }else{ // normal / happy
+    ctx.fillStyle="#2E241F"; ctx.beginPath(); ctx.arc(lx,ly,8,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(rx,ry,8,0,Math.PI*2); ctx.fill();
+  }
+
+  // blush
+  if(state.blush){
+    ctx.fillStyle="rgba(255,165,165,0.5)";
+    ctx.beginPath(); ctx.ellipse(190,194,14,9,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(310,194,14,9,0,0,Math.PI*2); ctx.fill();
+  }
+
+  // nose & whiskers
+  ctx.fillStyle="#FF8C7A"; ctx.beginPath(); ctx.ellipse(250,192,8,6,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle="#9B5E2E"; ctx.beginPath(); ctx.moveTo(250,198); ctx.lineTo(244,205); ctx.lineTo(256,205); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(188,186); ctx.lineTo(156,180); ctx.moveTo(312,186); ctx.lineTo(344,180);
+  ctx.lineWidth=1.8; ctx.strokeStyle="#C27E44"; ctx.stroke();
+
+  // paws
+  ctx.beginPath(); ctx.ellipse(170,305,22,18,0,0,Math.PI*2); ctx.fillStyle="#F9CF8C"; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(330,305,22,18,0,0,Math.PI*2); ctx.fillStyle="#F9CF8C"; ctx.fill();
+
+  // tail
+  ctx.beginPath();
+  let tx=state.tail?12:0, ty=state.tail?-8:4;
+  ctx.moveTo(368,288); ctx.quadraticCurveTo(398+tx,268+ty,412,248+(state.tail?-4:6));
+  ctx.lineTo(402,238); ctx.quadraticCurveTo(386+(state.tail?7:0),262,368,278);
+  ctx.fillStyle="#E2A455"; ctx.fill();
+
+  // collar
+  ctx.beginPath(); ctx.ellipse(250,226,34,9,0,0,Math.PI*2); ctx.fillStyle="#DA8A49"; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(250,226,12,8,0,0,Math.PI*2); ctx.fillStyle="#FCCB7E"; ctx.fill();
+}
+  
+// auto blink every 3 sec
+setInterval(()=>{
+  if(state.eye=='n'){state.eye='b'; drawCat(); setTimeout(()=>{state.eye='n'; drawCat();},150);}
+},3000);
+
+// click to pat
+c.addEventListener('click',()=>{pat();});
+c.addEventListener('touchstart',(e)=>{e.preventDefault();pat();});
+
+drawCat();
+</script>
+</body>
+</html>
