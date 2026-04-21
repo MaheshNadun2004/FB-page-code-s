@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>CodeNova LK</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 30%, #0a0f1a, #03060c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      cursor: default;
+    }
+
+    /* ========= ANIMATED FLOATING PARTICLES / ORBS ========= */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatOrb 18s infinite alternate ease-in-out;
+    }
+
+    .orb1 {
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, #ff4d6d, #ff0a54);
+      top: 10%;
+      left: -5%;
+      animation-duration: 22s;
+      animation-delay: -2s;
+    }
+
+    .orb2 {
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, #3a86ff, #8338ec);
+      bottom: 5%;
+      right: -8%;
+      animation-duration: 25s;
+      animation-delay: -5s;
+    }
+
+    .orb3 {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, #00f5d4, #00bbf9);
+      top: 40%;
+      left: 60%;
+      animation-duration: 19s;
+      animation-delay: -1s;
+      opacity: 0.3;
+    }
+
+    .orb4 {
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, #fee440, #f15bb5);
+      bottom: 20%;
+      left: 15%;
+      animation-duration: 28s;
+      animation-delay: -8s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        transform: translate(40px, -30px) scale(1.1);
+      }
+    }
+
+    /* ========= MAIN GLASS CARD ========= */
+    .box {
+      position: relative;
+      width: 360px;
+      min-height: 280px;
+      padding: 28px 24px 36px;
+      color: #fff;
+      text-align: center;
+      border-radius: 32px;
+      background: rgba(15, 25, 35, 0.35);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      z-index: 10;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      
+      /* Floating animation - beautiful gentle drift */
+      animation: floatCard 4.8s infinite ease-in-out;
+    }
+
+    /* subtle floating motion for the card */
+    @keyframes floatCard {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-12px) rotate(0.6deg);
+      }
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+
+    /* hover effect - extra pop + glow */
+    .box:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 35px 55px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(18px);
+      transition: 0.25s;
+    }
+
+    /* ===== GLOWING ANIMATED BORDER (ENHANCED) ===== */
+    .box::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 34px;
+      background: linear-gradient(115deg, 
+        #ff0080, #ff8c00, #40e0d0, #1e90ff, 
+        #ff00cc, #ff8c00, #00ffaa, #ff0080);
+      background-size: 300% 300%;
+      z-index: -2;
+      animation: borderGlow 6s linear infinite;
+      filter: blur(2px);
+      opacity: 0.9;
+    }
+
+    /* secondary glow layer for extra intensity */
+    .box::before {
+      filter: blur(6px);
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .box:hover::before {
+      opacity: 1;
+      filter: blur(8px);
+    }
+
+    @keyframes borderGlow {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Inner background overlay (semi-dark for readability) */
+    .box::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      background: rgba(8, 18, 28, 0.55);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      z-index: -1;
+      transition: background 0.4s;
+    }
+
+    .box:hover::after {
+      background: rgba(8, 18, 28, 0.65);
+    }
+
+    /* ========= CONTENT STYLES + ANIMATIONS ========= */
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* animated gradient text */
+    .title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #FFE6F0, #C0E0FF, #FFD966, #FFB3BA);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmerText 5s linear infinite;
+      letter-spacing: -0.5px;
+    }
+
+    @keyframes shimmerText {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* decorative animated underline */
+    .glow-line {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+      background-size: 200% auto;
+      margin: 12px auto 18px;
+      border-radius: 4px;
+      animation: lineMove 2.5s infinite alternate;
+    }
+
+    @keyframes lineMove {
+      0% {
+        width: 50px;
+        opacity: 0.6;
+        background-position: 0% 0%;
+      }
+      100% {
+        width: 110px;
+        opacity: 1;
+        background-position: 100% 0%;
+      }
+    }
+
+    .description {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 16px 0 22px;
+      opacity: 0.9;
+      font-weight: 400;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      animation: fadeSlideUp 0.8s ease-out;
+    }
+
+    /* subtle fade-in for description */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 0.9;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== BUTTON WITH PULSE + RIPPLE + HOVER MAGIC ===== */
+    .btn {
+      position: relative;
+      margin-top: 10px;
+      padding: 12px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 60px;
+      background: linear-gradient(105deg, #00c6fb, #005bea);
+      background-size: 150% auto;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 91, 234, 0.4);
+      letter-spacing: 0.8px;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+      z-index: 0;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background-position: 100% 0%;
+      box-shadow: 0 8px 25px rgba(0, 150, 255, 0.6);
+    }
+
+    /* pulse ring animation on button (gentle) */
+    .btn {
+      animation: btnPulse 2.2s infinite;
+    }
+
+    @keyframes btnPulse {
+      0% {
+        box-shadow: 0 5px 15px rgba(0, 91, 234, 0.4);
+            transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(0, 198, 251, 0.3), 0 5px 20px rgba(0, 91, 234, 0.7);
+        transform: scale(1.02);
+      }
+      100% {
+        box-shadow: 0 5px 15px rgba(0, 91, 234, 0.4);
+        transform: scale(1);
+      }
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+      transition: 0.05s;
+    }
+
+    /* ========= EXTRA SPARKLE EFFECT (mini animated star icons) ========= */
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #fff9c4;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 20;
+      filter: blur(1px);
+      animation: sparkleFloat 2.5s infinite;
+    }
+
+    @keyframes sparkleFloat {
+      0% {
+        opacity: 0;
+        transform: scale(0.2) translateY(0px);
+      }
+      50% {
+        opacity: 0.9;
+        transform: scale(1) translateY(-8px);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.2) translateY(-16px);
+      }
+    }
+
+    /* additional twinkling effect on box background (animated shine) */
+    .shine-sweep {
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 120%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,240,0.12), transparent);
+      transform: skewX(-20deg);
+      animation: sweepLight 7s infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes sweepLight {
+      0% {
+        left: -150%;
+      }
+      20% {
+        left: 120%;
+      }
+      100% {
+        left: 120%;
+      }
+    }
+
+    /* responsive adjustment */
+    @media (max-width: 480px) {
+      .box {
+        width: 300px;
+        padding: 22px 18px 32px;
+      }
+      .title {
+        font-size: 1.8rem;
+      }
+      .description {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- floating atmospheric orbs for dreamy background animation -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
+
+  <!-- Main Card with Glowing Border and all animations -->
+  <div class="box">
+    <!-- extra sweeping light beam for additional elegance -->
+    <div class="shine-sweep"></div>
+    
+    <div class="content">
+      <h1 class="title">✨ABC✨</h1>
+      <div class="glow-line"></div>
+      <p class="description">
+       CodeNova LK
+      </p>
+      <button class="btn" id="magicBtn">Hello..!</button>
+    </div>
+
+    <!-- dynamic sparkle particles created by js (just for extra fun) -->
+  </div>
+
+  <script>
+    // Create sparkling particles on button click and also random sparkle around card
+    // to amplify the "beautiful animation" feel — interactive micro-animations
+    const btn = document.getElementById('magicBtn');
+    const card = document.querySelector('.box');
+
+    // function to create a burst of sparkles at given coordinates
+    function createSparkle(x, y) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      document.body.appendChild(sparkle);
+      
+      // randomize size and color variation
+      const size = Math.random() * 8 + 4;
+      sparkle.style.width = size + 'px';
+      sparkle.style.height = size + 'px';
+      sparkle.style.background = `hsl(${Math.random() * 60 + 40}, 100%, 70%)`;
+      sparkle.style.boxShadow = `0 0 8px gold`;
+      sparkle.style.opacity = '1';
+      
+      // animation end remove
+      sparkle.addEventListener('animationend', () => {
+        sparkle.remove();
+      });
+    }
+
+    // generate random sparkle around the card on hover (subtle magical)
+    let hoverTimeout;
+    card.addEventListener('mousemove', (e) => {
+      // limit frequency
+      if (hoverTimeout) return;
+      hoverTimeout = setTimeout(() => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+        // only if inside card boundaries
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          for (let i = 0; i < 2; i++) {
+            setTimeout(() => {
+              const offsetX = x + (Math.random() - 0.5) * 40;
+              const offsetY = y + (Math.random() - 0.5) * 30;
+              createSparkle(offsetX, offsetY);
+            }, i * 30);
+          }
+        }
+        hoverTimeout = null;
+      }, 80);
+    });
+
+    // click button — spectacular sparkle rain + card celebration animation
+    btn.addEventListener('click', (e) => {
+      // button ripple feel
+      const rect = btn.getBoundingClientRect();
+      const clickX = rect.left + rect.width / 2;
+      const clickY = rect.top + rect.height / 2;
+      
+      // burst of sparkles
+      for (let i = 0; i < 24; i++) {
+        setTimeout(() => {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * 70 + 10;
+          const xOff = Math.cos(angle) * radius;
+          const yOff = Math.sin(angle) * radius;
+          createSparkle(clickX + xOff, clickY + yOff);
+        }, i * 35);
+      }
+      
+      // additional card "wobble" animation (short extra delight)
+      card.style.animation = 'none';
+      card.offsetHeight; // reflow
+      card.style.animation = 'floatCard 4.8s infinite ease-in-out';
+      card.style.transform = 'scale(1.02)';
+      setTimeout(() => {
+        card.style.transform = '';
+      }, 180);
+      
+      // temporary button text change
+      const originalText = btn.innerText;
+      btn.innerText = '✨ Hi.. ✨';
+      btn.style.background = 'linear-gradient(105deg, #f857a6, #ff5858)';
+      setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.background = 'linear-gradient(105deg, #00c6fb, #005bea)';
+      }, 800);
+      
+      // also create floating hearts/sparkle effect around card borders
+      const cardRect = card.getBoundingClientRect();
+      for (let s = 0; s < 12; s++) {
+        setTimeout(() => {
+          const randX = cardRect.left + Math.random() * cardRect.width;
+          const randY = cardRect.top + Math.random() * cardRect.height;
+          createSparkle(randX, randY);
+        }, s * 50);
+      }
+    });
+
+    // additional ambient sparkle generation every 3 seconds around card edges (passive magic)
+    setInterval(() => {
+      if (document.hidden) return;
+      const rect = card.getBoundingClientRect();
+      const edge = Math.floor(Math.random() * 4);
+      let x, y;
+      if (edge === 0) { // top edge
+        x = rect.left + Math.random() * rect.width;
+        y = rect.top - 5;
+      } else if (edge === 2) { // bottom edge
+        x = rect.left + Math.random() * rect.width;
+        y = rect.bottom + 5;
+      } else if (edge === 1) { // right edge
+        x = rect.right + 5;
+        y = rect.top + Math.random() * rect.height;
+      } else {
+        x = rect.left - 5;
+        y = rect.top + Math.random() * rect.height;
+      }
+      if (x > 5 && y > 5 && x < window.innerWidth - 5 && y < window.innerHeight - 5) {
+        createSparkle(x, y);
+      }
+    }, 2800);
+  </script>
+</body>
+</html>
