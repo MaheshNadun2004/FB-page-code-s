@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Eclipse | Minimal Bottom Navigation</title>
+  <!-- Google Fonts + Font Awesome 6 (free) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at 20% 40%, #f4f7fe, #e9eef8);
+      min-height: 100vh;
+      padding-bottom: 100px;
+      color: #1e2a3e;
+    }
+
+    /* main content container — clean & minimal */
+    .content-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      animation: fadeSlideUp 0.35s ease-out;
+    }
+
+    /* minimalist card — no badges, no chips, no long paragraphs */
+    .minimal-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      border-radius: 2.5rem;
+      box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.6);
+      padding: 2.5rem 1.8rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    /* large central icon */
+    .hero-icon {
+      font-size: 4.2rem;
+      color: #007aff;
+      margin-bottom: 1.2rem;
+      display: inline-block;
+      filter: drop-shadow(0 6px 12px rgba(0,122,255,0.12));
+      transition: transform 0.2s ease;
+    }
+
+    .minimal-card h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #1e2f3f, #2c3e50);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .minimal-sub {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #6c7e97;
+      letter-spacing: 0.2px;
+      margin-top: 0.75rem;
+      opacity: 0.75;
+    }
+
+    /* ----- FLOATING BOTTOM NAV (glass + modern) ----- */
+    .bottom-nav {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(20px);
+      border-radius: 48px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 6px 12px;
+      box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.7);
+      transition: all 0.2s ease;
+      z-index: 1000;
+      border: 0.5px solid rgba(255,255,255,0.8);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #6c7a8e;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 40px;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      cursor: pointer;
+      background: transparent;
+      min-width: 70px;
+      gap: 4px;
+    }
+
+    .icon {
+      font-size: 24px;
+      line-height: 1;
+      transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      display: inline-block;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      transition: color 0.2s;
+    }
+
+    @media (hover: hover) {
+      .nav-item:hover:not(.active) {
+        background: rgba(0, 122, 255, 0.08);
+        transform: translateY(-2px);
+        color: #2c7be5;
+      }
+    }
+
+    .nav-item.active {
+      background: rgba(0, 122, 255, 0.16);
+      color: #007aff;
+      box-shadow: 0 2px 8px rgba(0, 122, 255, 0.12);
+    }
+
+    .nav-item.active .icon {
+      transform: translateY(-2px);
+    }
+
+    .nav-item.active .icon i {
+      transform: scale(1.06);
+      filter: drop-shadow(0 2px 4px rgba(0,122,255,0.2));
+    }
+
+    .nav-item.active .label {
+      font-weight: 700;
+    }
+
+    .nav-item:active {
+      transform: scale(0.96);
+      transition: transform 0.08s;
+    }
+
+    @keyframes fadeSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    ::selection {
+      background: rgba(0, 122, 255, 0.2);
+    }
+
+    @media (max-width: 480px) {
+      .bottom-nav {
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        padding: 5px 8px;
+      }
+      .nav-item {
+        padding: 6px 10px;
+        min-width: 60px;
+      }
+      .icon {
+        font-size: 22px;
+      }
+      .label {
+        font-size: 10px;
+      }
+      .minimal-card {
+        padding: 2rem 1.2rem;
+      }
+      .hero-icon {
+        font-size: 3.4rem;
+      }
+      .minimal-card h2 {
+        font-size: 1.7rem;
+      }
+      .content-container {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    .bg-glow {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 140px;
+      background: radial-gradient(ellipse at 50% 100%, rgba(0,122,255,0.04), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content-container {
+      position: relative;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <main class="content-container">
+    <div class="minimal-card" id="dynamicContent">
+      <!-- ultra-minimal dynamic content will be injected here -->
+      <div class="hero-icon"><i class="fas fa-house-chimney"></i></div>
+      <h2>Home</h2>
+      <div class="minimal-sub">start exploring</div>
+    </div>
+  </main>
+
+  <!-- Floating Bottom Navigation — clean & modern -->
+  <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-item active" data-tab="home" role="button" tabindex="0" aria-current="page">
+      <span class="icon"><i class="fas fa-house-chimney"></i></span>
+      <span class="label">Home</span>
+    </div>
+    <div class="nav-item" data-tab="search" role="button" tabindex="0">
+      <span class="icon"><i class="fas fa-magnifying-glass"></i></span>
+      <span class="label">Search</span>
+    </div>
+    <div class="nav-item" data-tab="favorites" role="button" tabindex="0">
+      <span class="icon"><i class="fas fa-heart"></i></span>
+      <span class="label">Favorites</span>
+    </div>
+    <div class="nav-item" data-tab="profile" role="button" tabindex="0">
+      <span class="icon"><i class="fas fa-user-astronaut"></i></span>
+      <span class="label">Profile</span>
+    </div>
+  </nav>
+
+  <script>
+    (function() {
+      const navItems = document.querySelectorAll('.nav-item');
+      const contentDiv = document.getElementById('dynamicContent');
+
+      // Minimal content map — no paragraphs, no badges, no chips, no long texts.
+      // Only a beautiful icon, a clean title, and a subtle short line (optional).
+      const minimalData = {
+        home: {
+          icon: 'fa-house-chimney',
+          title: 'Home',
+          subtitle: 'your space'
+        },
+        search: {
+          icon: 'fa-magnifying-glass',
+          title: 'Search',
+          subtitle: 'discover'
+        },
+        favorites: {
+          icon: 'fa-heart',
+          title: 'Favorites',
+          subtitle: 'saved'
+        },
+        profile: {
+          icon: 'fa-user-astronaut',
+          title: 'Profile',
+          subtitle: 'you'
+        }
+      };
+
+      // Function to update the main content with clean minimal design
+      function updateMinimalContent(tabId) {
+        const data = minimalData[tabId];
+        if (!data) return;
+
+        // Smooth fade transition
+        contentDiv.style.animation = 'none';
+        contentDiv.offsetHeight; // force reflow
+        contentDiv.style.animation = 'fadeSlideUp 0.3s ease-out';
+
+        // Build ultra-clean HTML — only icon, title, minimal subtitle (no lists, no paragraphs)
+        contentDiv.innerHTML = `
+          <div class="hero-icon"><i class="fas ${data.icon}"></i></div>
+          <h2>${data.title}</h2>
+          <div class="minimal-sub">${data.subtitle}</div>
+        `;
+      }
+
+      // Set active class on nav item and update aria-current
+      function setActiveTab(activeElement) {
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          item.setAttribute('aria-current', 'false');
+        });
+        activeElement.classList.add('active');
+        activeElement.setAttribute('aria-current', 'page');
+      }
+
+      // Navigation click handler
+      function onNavClick(event) {
+        const targetItem = event.currentTarget;
+        const tabId = targetItem.getAttribute('data-tab');
+        if (!tabId) return;
+        if (targetItem.classList.contains('active')) return; // already active, no need
+
+        setActiveTab(targetItem);
+        updateMinimalContent(tabId);
+
+        // subtle press feedback
+        targetItem.style.transform = 'scale(0.97)';
+        setTimeout(() => {
+          if (targetItem) targetItem.style.transform = '';
+        }, 120);
+      }
+
+      // Attach event listeners + keyboard accessibility
+      navItems.forEach(item => {
+        item.addEventListener('click', onNavClick);
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            item.click();
+          }
+        });
+        if (!item.getAttribute('aria-label')) {
+          const label = item.querySelector('.label')?.innerText || 'tab';
+          item.setAttribute('aria-label', `Navigate to ${label}`);
+        }
+      });
+
+      // Initialize: ensure active tab (home) shows minimal home content
+      const activeNav = document.querySelector('.nav-item.active');
+      if (activeNav && activeNav.getAttribute('data-tab') === 'home') {
+        updateMinimalContent('home');
+      } else {
+        // fallback: set home as active and update
+        const homeItem = document.querySelector('.nav-item[data-tab="home"]');
+        if (homeItem) {
+          setActiveTab(homeItem);
+          updateMinimalContent('home');
+        } else {
+          updateMinimalContent('home');
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
